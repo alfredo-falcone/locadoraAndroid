@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Locadora</string>
+    <string name="action_filmes">Filmes</string>
+    <string name="action_alugueis">Alugar</string>
+    <string name="action_listar_bens">Listar Bens</string>
+    <string name="action_alugar_bem">Alugar</string>
+    <string name="title_activity_listar_bens">ListarBens</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_alugar_bem">AlugarBem</string>
+    <string name="texto_hora_devolucao">Hora de Devolução</string>
+    <string name="texto_selecionar_bem">Selecione o Bem</string>
+
+
+</resources>

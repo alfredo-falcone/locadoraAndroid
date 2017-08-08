@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="br.com.falcone.locadora.PrincipalActivity">
+    <item
+        android:id="@+id/action_filmes"
+        android:orderInCategory="100"
+        android:title="@string/action_filmes"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_alugueis"
+        android:orderInCategory="100"
+        android:title="@string/action_alugueis"
+        app:showAsAction="never" />
+</menu>
