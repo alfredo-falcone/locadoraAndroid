@@ -18,10 +18,14 @@ class Global {
     private Global() {
         bens = new ArrayList<>();
 
-        bens.add(new Bem("Nome1", "genero1", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome2", "genero2", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome3", "genero3", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome4", "genero4", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Jet Ski Yamaha", "Navegação", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Piscina 200L", "Infantil", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Bóia Dinossauro", "Infantil", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Caiaque azul", "Navegação", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Wind Surf", "Navegação", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Guarda-sol", "Conforto", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Cadeira listrada", "Conforto", "http://i.imgur.com/DvpvklR.png"));
+        bens.add(new Bem("Cadeira corpo inteiro", "Conforto", "http://i.imgur.com/DvpvklR.png"));
 
     }
 

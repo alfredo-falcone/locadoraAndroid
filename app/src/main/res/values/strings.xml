@@ -9,6 +9,15 @@
     <string name="title_activity_alugar_bem">AlugarBem</string>
     <string name="texto_hora_devolucao">Hora de Devolução</string>
     <string name="texto_selecionar_bem">Selecione o Bem</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="texto_confirma_gravacao">"Confirma gravação?"</string>
+    <string name="texto_preencher_hora_devolucao">"A hora de devolução deve ser preenchida"</string>
+    <string name="ok">Ok</string>
+    <string name="toast_alarme_agendado">"Alarme agendado!"</string>
+    <string name="texto_nome">Nome</string>
+    <string name="texto_genero">Gênero</string>
+
 
 
 </resources>

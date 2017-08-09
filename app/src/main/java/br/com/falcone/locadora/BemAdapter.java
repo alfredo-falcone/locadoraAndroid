@@ -47,10 +47,10 @@ public class BemAdapter extends ArrayAdapter<Bem> {
             txtNome.setText(bem.getNome());
         }
 
-        ImageView img = convertView.findViewById(R.id.img);
+        /*ImageView img = convertView.findViewById(R.id.img);
         if(img != null){
             Picasso.with(getContext()).load(bem.getSite()).into(img);
-        }
+        }*/
 
         return convertView;
     }

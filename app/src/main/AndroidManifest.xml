@@ -27,6 +27,11 @@
             android:name=".AlugarBemActivity"
             android:label="@string/title_activity_alugar_bem"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <receiver
+            android:name=".AlarmeDevolucao"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

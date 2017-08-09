@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class AlarmeDevolucao extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Alarme disparado!", Toast.LENGTH_SHORT).show();
+        String nome = intent.getExtras().getString(AlugarBemFragment.BEM_NOME);
+        Toast.makeText(context, "Hora da devolução do bem " + nome, Toast.LENGTH_SHORT).show();
     }
 }
