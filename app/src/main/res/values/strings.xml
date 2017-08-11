@@ -4,20 +4,30 @@
     <string name="action_alugueis">Alugar</string>
     <string name="action_listar_bens">Listar Bens</string>
     <string name="action_alugar_bem">Alugar</string>
-    <string name="title_activity_listar_bens">ListarBens</string>
+    <string name="title_activity_listar_bens">Listar Bens</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_alugar_bem">AlugarBem</string>
+    <string name="title_activity_alugar_bem">Alugar Bem</string>
     <string name="texto_hora_devolucao">Hora de Devolução</string>
     <string name="texto_selecionar_bem">Selecione o Bem</string>
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
-    <string name="texto_confirma_gravacao">"Confirma gravação?"</string>
+    <string name="texto_confirma_gravacao">Confirma gravação?</string>
     <string name="texto_preencher_hora_devolucao">"A hora de devolução deve ser preenchida"</string>
     <string name="ok">Ok</string>
-    <string name="toast_alarme_agendado">"Alarme agendado!"</string>
+    <string name="toast_alarme_agendado">Alarme agendado!</string>
     <string name="texto_nome">Nome</string>
     <string name="texto_genero">Gênero</string>
+    <string name="texto_titulo_notificacao_devolucao">Hora de recuperar bem</string>
+    <string name="texto_notificacao_devolucao">Hora da devolução do bem %s</string>
+    <string name="texto_gravar">Gravar</string>
+    <string name="texto_confirma_exclusao">Confirma Exclusão?</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="texto_cancelar">Cancelar</string>
+    <string name="editar">Editar</string>
+    <string name="novo">Novo</string>
+    <string name="texto_confirma_devolucao">Confirma devolução?</string>
 
 
 </resources>

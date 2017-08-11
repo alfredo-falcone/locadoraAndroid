@@ -22,7 +22,12 @@
         <activity
             android:name=".ListarBensActivity"
             android:label="@string/title_activity_listar_bens"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="br.com.falcone.locadora.android.ACAO_CUSTOMIZADA"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AlugarBemActivity"
             android:label="@string/title_activity_alugar_bem"

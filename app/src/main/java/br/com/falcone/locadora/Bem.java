@@ -15,6 +15,10 @@ public class Bem {
         this.setSite(site);
     }
 
+    public Bem(){
+        this(null, null, null);
+    }
+
     public String getNome() {
         return nome;
     }
@@ -37,5 +41,12 @@ public class Bem {
 
     public void setSite(String site) {
         this.site = site;
+    }
+
+    @Override
+    public boolean equals(Object instancia) {
+        return instancia != null && instancia instanceof Bem
+                && ((Bem)instancia).getNome() != null && this.getNome() != null && ((Bem)instancia).getNome().equals(this.getNome());
+
     }
 }

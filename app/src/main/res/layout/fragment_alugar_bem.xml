@@ -48,6 +48,7 @@
         <Button
             android:id="@+id/btGravarAluguel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/texto_gravar"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

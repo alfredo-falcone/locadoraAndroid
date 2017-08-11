@@ -1,8 +1,13 @@
 package br.com.falcone.locadora;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -14,13 +19,17 @@ import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
+    private NotificationManager mNotificationManager;
+
+    public static final String IS_BIG_NOTIFICATION = "isBigNotification";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        init();
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +54,7 @@ public class PrincipalActivity extends AppCompatActivity {
         Button btAlugar = (Button) findViewById(R.id.btAlugarBem);
         btAlugar.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+                //createSimpleNotification();
                 //AlertDialog pergunta = new AlertDialog.Builder()
                 Intent i = new Intent(getApplicationContext(), AlugarBemActivity.class);
                 if (i.resolveActivity(getPackageManager()) != null) {
@@ -54,6 +64,11 @@ public class PrincipalActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    private void init(){
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -78,14 +93,30 @@ public class PrincipalActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public List<Bem> InicializarBens()
-    {
-        List<Bem> bens = new ArrayList<>();
-        bens = new ArrayList<>();
-        bens.add(new Bem("Nome1", "genero1", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome2", "genero2", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome3", "genero3", "http://i.imgur.com/DvpvklR.png"));
-        bens.add(new Bem("Nome4", "genero4", "http://i.imgur.com/DvpvklR.png"));
-        return bens;
-    }
+    /*private void createSimpleNotification() {
+        NotificationCompat.Builder mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Notificação simples")
+                        .setContentText("Clique para saber mais...");
+
+        Intent resultIntent = new Intent(this, ListarBensActivity.class);
+        resultIntent.putExtra(IS_BIG_NOTIFICATION,  false);
+
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(PrincipalActivity.class);
+
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        mNotificationManager.notify(10000, mBuilder.build());
+
+    }*/
 }

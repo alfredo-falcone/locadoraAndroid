@@ -35,6 +35,8 @@ public class BemAdapter extends ArrayAdapter<Bem> {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(layoutId, parent, false);
         }
+        //if(Global.getInstance().IsBemAlugado(bem))
+        //    convertView.setBackgroundColor(Color.RED);
         TextView txtGenero = convertView.findViewById(R.id.txtGenero);
         if(txtGenero != null)
             txtGenero.setText(bem.getGenero());
@@ -44,6 +46,7 @@ public class BemAdapter extends ArrayAdapter<Bem> {
                 txtNome = (TextView) convertView;
         }
         if(txtNome != null) {
+            txtNome.setTextColor(Color.BLACK);
             txtNome.setText(bem.getNome());
         }
 
