@@ -18,7 +18,7 @@ public class AlarmeDevolucao extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String nome = intent.getExtras().getString(AlugarBemFragment.BEM_NOME);
-        Toast.makeText(context, "Hora da devolução do bem " + nome, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, String.format(context.getString(R.string.texto_notificacao_devolucao), nome), Toast.LENGTH_SHORT).show();
         Notificar(context, nome);
 
     }

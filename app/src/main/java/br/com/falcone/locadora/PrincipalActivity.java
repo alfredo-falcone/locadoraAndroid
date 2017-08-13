@@ -43,10 +43,7 @@ public class PrincipalActivity extends AppCompatActivity {
         btBens.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 //AlertDialog pergunta = new AlertDialog.Builder()
-                Intent i = new Intent(getApplicationContext(), ListarBensActivity.class);
-                if (i.resolveActivity(getPackageManager()) != null) {
-                    startActivity(i);
-                }
+                ListarBens();
             }
 
         });
@@ -56,14 +53,25 @@ public class PrincipalActivity extends AppCompatActivity {
             public void onClick(View view){
                 //createSimpleNotification();
                 //AlertDialog pergunta = new AlertDialog.Builder()
-                Intent i = new Intent(getApplicationContext(), AlugarBemActivity.class);
-                if (i.resolveActivity(getPackageManager()) != null) {
-                    startActivity(i);
-                }
+                Alugar();
             }
 
         });
 
+    }
+
+    private void ListarBens() {
+        Intent i = new Intent(getApplicationContext(), ListarBensActivity.class);
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivity(i);
+        }
+    }
+
+    private void Alugar() {
+        Intent i = new Intent(getApplicationContext(), AlugarBemActivity.class);
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivity(i);
+        }
     }
 
     private void init(){
@@ -86,7 +94,12 @@ public class PrincipalActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_alugar_bem) {
+            Alugar();
+            return true;
+        }
+        else if (id == R.id.action_listar_bens) {
+            ListarBens();
             return true;
         }
 

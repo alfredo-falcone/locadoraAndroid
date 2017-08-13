@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="br.com.falcone.locadora.PrincipalActivity">
     <item
-        android:id="@+id/action_filmes"
+        android:id="@+id/action_listar_bens"
         android:orderInCategory="100"
-        android:title="@string/action_filmes"
+        android:title="@string/action_listar_bens"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_alugueis"
+        android:id="@+id/action_alugar_bem"
         android:orderInCategory="100"
-        android:title="@string/action_alugueis"
+        android:title="@string/action_alugar_bem"
         app:showAsAction="never" />
 </menu>

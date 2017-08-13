@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rental</string>
-    <string name="action_filmes">Movies</string>
+    <string name="action_listar_bens">Inventory</string>
+    <string name="action_alugar_bem">Rent</string>
+    <string name="title_activity_listar_bens">Inventory</string>
+    <string name="title_activity_alugar_bem">Rent</string>
+    <string name="texto_hora_devolucao">Devolution Time</string>
+    <string name="texto_selecionar_bem">Select item</string>
+    <string name="sim">Yes</string>
+    <string name="nao">No</string>
+    <string name="texto_confirma_gravacao">Confirm delete?</string>
+    <string name="texto_preencher_hora_devolucao">Devolution time is mandatory</string>
+    <string name="ok">Ok</string>
+    <string name="toast_alarme_agendado">Item rented.</string>
+    <string name="texto_nome">Name</string>
+    <string name="texto_genero">Gender</string>
+    <string name="texto_titulo_notificacao_devolucao">Time to recover item</string>
+    <string name="texto_notificacao_devolucao">Time to recover item %s</string>
+    <string name="texto_gravar">Save</string>
+    <string name="texto_confirma_exclusao">Confirm delete?</string>
+    <string name="texto_cancelar">Cancel</string>
+    <string name="editar">Edit</string>
+    <string name="novo">New</string>
+    <string name="texto_confirma_devolucao">Confirm devolution?</string>
+
 </resources>
