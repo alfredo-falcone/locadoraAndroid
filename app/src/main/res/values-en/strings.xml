@@ -9,7 +9,7 @@
     <string name="texto_selecionar_bem">Select item</string>
     <string name="sim">Yes</string>
     <string name="nao">No</string>
-    <string name="texto_confirma_gravacao">Confirm delete?</string>
+    <string name="texto_confirma_gravacao">Confirm save?</string>
     <string name="texto_preencher_hora_devolucao">Devolution time is mandatory</string>
     <string name="ok">Ok</string>
     <string name="toast_alarme_agendado">Item rented.</string>
