@@ -23,5 +23,6 @@
     <string name="editar">Edit</string>
     <string name="novo">New</string>
     <string name="texto_confirma_devolucao">Confirm devolution?</string>
+    <string name="texto_preco">Price</string>
 
 </resources>

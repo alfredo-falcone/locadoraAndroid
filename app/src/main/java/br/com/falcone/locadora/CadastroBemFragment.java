@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.Toast;
+
+import br.com.falcone.locadora.model.Bem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,10 +25,10 @@ import android.widget.ListView;
  */
 public class CadastroBemFragment extends DialogFragment {
 
-    private static final String ARG_NOME = "nome";
+    private static final String ARG_ID = "id";
 
 
-    private String mNome;
+    private long mId;
     private Bem mBem;
     private DialogCadastroBemListener mListener;
     private View mView;
@@ -40,10 +42,10 @@ public class CadastroBemFragment extends DialogFragment {
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    public static CadastroBemFragment newInstance(String nome) {
+    public static CadastroBemFragment newInstance(long id) {
         CadastroBemFragment fragment = new CadastroBemFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_NOME, nome);
+        args.putLong(ARG_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,29 +54,50 @@ public class CadastroBemFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mNome = getArguments().getString(ARG_NOME);
+            mId = getArguments().getLong(ARG_ID);
         }
+        else
+            mId = 0;
 
     }
 
 
-    private void GravarBem() {
+    private boolean GravarBem() {
+        boolean retorno = false;
         EditText tbNomeCadastro = mView.findViewById(R.id.tbNomeCadastro);
         EditText tbGeneroCadastro = mView.findViewById(R.id.tbGeneroCadastro);
-        this.mBem.setNome(tbNomeCadastro.getText().toString());
-        this.mBem.setGenero(tbGeneroCadastro.getText().toString());
-        if(!Global.getInstance().getBens().contains(this.mBem)){
-            Global.getInstance().getBens().add(this.mBem);
+        EditText tbPrecoCadastro = mView.findViewById(R.id.tbPrecoCadastro);
+
+        if(tbNomeCadastro.getText().length() == 0 ||
+                tbGeneroCadastro.getText().length() == 0 || tbPrecoCadastro.getText().length() == 0){
+            Toast.makeText(getContext(), R.string.toast_dados_obrigatorios, Toast.LENGTH_LONG).show();
+
         }
+        else {
+            this.mBem.setNome(tbNomeCadastro.getText().toString());
+            this.mBem.setGenero(tbGeneroCadastro.getText().toString());
+            this.mBem.setPrecoHora(Double.parseDouble(tbPrecoCadastro.getText().toString()));
+
+            if (this.mId == 0) {
+                Global.getInstance(getContext()).InserirBem(this.mBem);
+            }
+            else{
+                Global.getInstance(getContext()).AtualizarBem(this.mBem);
+            }
+
+            retorno = true;
+        }
+        return retorno;
     }
 
     private void CarregarBemTela(View view)
     {
-
         EditText tbNomeCadastro = mView.findViewById(R.id.tbNomeCadastro);
         EditText tbGeneroCadastro = mView.findViewById(R.id.tbGeneroCadastro);
+        EditText tbPrecoCadastro = mView.findViewById(R.id.tbPrecoCadastro);
         tbNomeCadastro.setText(this.mBem.getNome());
         tbGeneroCadastro.setText(this.mBem.getGenero());
+        tbPrecoCadastro.setText(this.mBem.getPrecoHora().toString());
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,16 +110,16 @@ public class CadastroBemFragment extends DialogFragment {
         //tbNomeCadastro.setText("teste");
         if(mBem == null) {
 
-            if (mNome != null) {
-                mBem = Global.getInstance().getBens().get(Global.getInstance().getBens().indexOf(new Bem(mNome, null, null)));
-                EditText tbNomeCadastro = mView.findViewById(R.id.tbNomeCadastro);
-                tbNomeCadastro.setEnabled(false);
+            if (mId != 0) {
+                mBem = Global.getInstance(getContext()).getBemPorId(mId);
+                //EditText tbNomeCadastro = mView.findViewById(R.id.tbNomeCadastro);
+                //tbNomeCadastro.setEnabled(false);
 
             }
 
             if(mBem == null) {
 
-                mBem = new Bem(null, null, null);
+                mBem = new Bem(mId, null, null, 0.0);
             }
         }
         CarregarBemTela(mView);
@@ -109,14 +132,11 @@ public class CadastroBemFragment extends DialogFragment {
         this.mView = getActivity().getLayoutInflater().inflate(R.layout.fragment_cadastro_bem, null);
         AlertDialog dlg =  new AlertDialog.Builder(getActivity())
                 //.setIcon(R.drawable.alert_dialog_icon)
-                .setTitle((mNome != null) ? R.string.editar : R.string.novo)
+                .setTitle((mId != 0) ? R.string.editar : R.string.novo)
                 .setPositiveButton(R.string.texto_gravar,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                GravarBem();
-                                //ListView lstBens = getActivity().findViewById(R.id.lstBens);
-                                //((BemAdapter)lstBens.getAdapter()).notifyDataSetChanged();
-                                ((DialogCadastroBemListener)getActivity()).onDialogPositiveClick(CadastroBemFragment.this);
+
 
                             }
                         }
@@ -129,9 +149,30 @@ public class CadastroBemFragment extends DialogFragment {
                             }
                         }
                 ).setView(mView).create();
+
         return dlg;
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        AlertDialog dlg = (AlertDialog) getDialog();
+        if(dlg != null) {
+
+            dlg.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (GravarBem()) {
+                        //ListView lstBens = getActivity().findViewById(R.id.lstBens);
+                        //((BemAdapter)lstBens.getAdapter()).notifyDataSetChanged();
+                        ((DialogCadastroBemListener) getActivity()).onDialogPositiveClick(CadastroBemFragment.this);
+                        dismiss();
+                    }
+                }
+            });
+        }
+
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

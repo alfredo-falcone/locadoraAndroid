@@ -1,15 +1,12 @@
 package br.com.falcone.locadora;
 
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -17,12 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
+import br.com.falcone.locadora.model.Bem;
 
 public class ListarBensActivity extends AppCompatActivity implements CadastroBemFragment.DialogCadastroBemListener {
 
@@ -46,7 +41,7 @@ public class ListarBensActivity extends AppCompatActivity implements CadastroBem
                 if(fragment!= null)
                     mFragmentManager.beginTransaction().remove(fragment).commit();
 
-                fragment = CadastroBemFragment.newInstance(null);
+                fragment = CadastroBemFragment.newInstance(0);
                 fragment.show(mFragmentManager, TAG_DLG_CADASTRO);
 
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -55,7 +50,7 @@ public class ListarBensActivity extends AppCompatActivity implements CadastroBem
         });
 
         mLstBens = (ListView)findViewById(R.id.lstBens);
-        mAdapter = new BemAdapter(getApplicationContext(), R.layout.item_bem, Global.getInstance().getBens());
+        mAdapter = new BemAdapter(getApplicationContext(), R.layout.item_bem, Global.getInstance(this).getBens());
         mLstBens.setAdapter(mAdapter);
 
         mLstBens.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -64,7 +59,7 @@ public class ListarBensActivity extends AppCompatActivity implements CadastroBem
                 final Bem bem = ListarBensActivity.this.mAdapter.getItem(posicao);
                 int idPergunta = R.string.texto_confirma_exclusao;
 
-                if(Global.getInstance().IsBemAlugado(bem))
+                if(Global.getInstance(ListarBensActivity.this).IsBemAlugado(bem))
                     idPergunta = R.string.texto_confirma_devolucao;
                 AcaoLongClickItem(idPergunta, bem);
 
@@ -80,21 +75,25 @@ public class ListarBensActivity extends AppCompatActivity implements CadastroBem
                 if(fragment!= null)
                     mFragmentManager.beginTransaction().remove(fragment).commit();
 
-                fragment = CadastroBemFragment.newInstance(bem.getNome());
+                fragment = CadastroBemFragment.newInstance(bem.getId());
                 fragment.show(mFragmentManager, TAG_DLG_CADASTRO);
             }
         });
 
         Intent it = getIntent();
         if (it.getAction() != null && it.getAction().equals("br.com.falcone.locadora.android.ACAO_CUSTOMIZADA")) {
-            String nomeBem = it.getStringExtra(AlugarBemFragment.BEM_NOME);
+            long id = it.getLongExtra(AlugarBemFragment.BEM_ID, 0);
             /*Bem bem = null;
             for(Bem bemAtual:Global.getInstance().getBens()){
                 if(bemAtual.getNome() == nomeBem)
                     bem = bemAtual;
             }*/
-            Bem bem = Global.getInstance().getBens().get(Global.getInstance().getBens().indexOf(new Bem(nomeBem, null, null)));
-            AcaoLongClickItem(R.string.texto_confirma_devolucao, bem);
+            Bem bem = Global.getInstance(this).getBemPorId(id);
+            if(bem != null)
+                AcaoLongClickItem(R.string.texto_confirma_devolucao, bem);
+            else
+                Toast.makeText(this, getString(R.string.texto_bem_inexistente), Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -105,22 +104,22 @@ public class ListarBensActivity extends AppCompatActivity implements CadastroBem
                 .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Predicate<Bem> predicado = p-> p.getNome() == bem.getNome();
-                        if(idPergunta == R.string.texto_confirma_devolucao && Global.getInstance().IsBemAlugado(bem))
+                        if(idPergunta == R.string.texto_confirma_devolucao && Global.getInstance(ListarBensActivity.this).IsBemAlugado(bem))
                         {
-                            Integer idAlarme = Global.getInstance().GetIdAlarme(bem);
+                            Integer idAlarme = Global.getInstance(ListarBensActivity.this).GetIdAlarme(bem);
 
                             Intent it = new Intent(ListarBensActivity.this, AlarmeDevolucao.class);
-                            it.putExtra(AlugarBemFragment.BEM_NOME, bem.getNome());
+                            it.putExtra(AlugarBemFragment.BEM_ID, bem.getId());
                             AlarmManager alarmManager = (AlarmManager) ListarBensActivity.this.getSystemService(Context.ALARM_SERVICE);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(ListarBensActivity.this, idAlarme, it, PendingIntent.FLAG_CANCEL_CURRENT);
                             alarmManager.cancel(pendingIntent);
                             pendingIntent.cancel();
 
-                            Global.getInstance().getAlugueis().remove(idAlarme);
+                            Global.getInstance(ListarBensActivity.this).getAlugueis().remove(idAlarme);
 
                         }
                         else if(idPergunta == R.string.texto_confirma_exclusao)
-                            Global.getInstance().getBens().remove(bem);
+                            Global.getInstance(ListarBensActivity.this).ExcluirBem(bem);
 
                         ListarBensActivity.this.mAdapter.notifyDataSetChanged();
 

@@ -1,28 +1,22 @@
 package br.com.falcone.locadora;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -30,14 +24,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
+
+import br.com.falcone.locadora.model.Bem;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AlugarBemFragment extends Fragment {
 
-    public static final String BEM_NOME = "bem.nome";
+    public static final String BEM_ID = "bem.id";
     public static final String ID_ALARME = "alarme.id";
     public AlugarBemFragment() {
     }
@@ -51,8 +46,8 @@ public class AlugarBemFragment extends Fragment {
         EditText tbHoraDevolucao = view.findViewById(R.id.tbHoraDevolucao);
 
         List<Bem> bensFiltrados = new ArrayList<>();
-        for (Bem bemAtual: Global.getInstance().getBens()) {
-            if(!Global.getInstance().IsBemAlugado(bemAtual))
+        for (Bem bemAtual: Global.getInstance(getContext()).getBens()) {
+            if(!Global.getInstance(getContext()).IsBemAlugado(bemAtual))
                 bensFiltrados.add(bemAtual);
         }
         BemAdapter adapter = new BemAdapter(getActivity().getApplicationContext(),
@@ -130,16 +125,16 @@ public class AlugarBemFragment extends Fragment {
 
         Integer idAlarme = null;
         int flag = 0;
-        if(Global.getInstance().IsBemAlugado(bemSelecionado)) {
+        if(Global.getInstance(getContext()).IsBemAlugado(bemSelecionado)) {
             flag = PendingIntent.FLAG_UPDATE_CURRENT;
-            idAlarme = Global.getInstance().GetIdAlarme(bemSelecionado);
+            idAlarme = Global.getInstance(getContext()).GetIdAlarme(bemSelecionado);
         }
         else {
-            idAlarme = Global.getInstance().getProximaChave();
+            idAlarme = Global.getInstance(getContext()).getProximaChave();
         }
 
         Intent it = new Intent(AlugarBemFragment.this.getActivity(), AlarmeDevolucao.class);
-        it.putExtra(BEM_NOME, bemSelecionado.getNome());
+        it.putExtra(BEM_ID, bemSelecionado.getId());
         PendingIntent pit = PendingIntent.getBroadcast(
                 AlugarBemFragment.this.getActivity(), idAlarme, it, flag);
 
@@ -159,7 +154,7 @@ public class AlugarBemFragment extends Fragment {
 
         Toast.makeText(getContext(), R.string.toast_alarme_agendado, Toast.LENGTH_SHORT).show();
 
-        Global.getInstance().getAlugueis().put(idAlarme, bemSelecionado);
+        Global.getInstance(getContext()).getAlugueis().put(idAlarme, bemSelecionado);
 
         Intent i = new Intent(getActivity().getApplicationContext(), PrincipalActivity.class);
         if (i.resolveActivity(getActivity().getPackageManager()) != null) {

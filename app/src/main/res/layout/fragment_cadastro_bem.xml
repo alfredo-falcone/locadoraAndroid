@@ -21,15 +21,28 @@
         </TableRow>
 
         <TableRow>
+        <TextView
+            android:id="@+id/lbGenero"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/texto_genero" />
+        <EditText
+            android:id="@+id/tbGeneroCadastro"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            />
+    </TableRow>
+        <TableRow>
             <TextView
-                android:id="@+id/lbGenero"
+                android:id="@+id/lbPreco"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="@string/texto_genero" />
+                android:text="@string/texto_preco" />
             <EditText
-                android:id="@+id/tbGeneroCadastro"
+                android:id="@+id/tbPrecoCadastro"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
+                android:inputType="numberDecimal"
                 />
         </TableRow>
 

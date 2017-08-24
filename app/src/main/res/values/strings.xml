@@ -23,6 +23,9 @@
     <string name="editar">Editar</string>
     <string name="novo">Novo</string>
     <string name="texto_confirma_devolucao">Confirma devolução?</string>
+    <string name="texto_preco">Preço</string>
+    <string name="toast_dados_obrigatorios">Todos os campos são obrigatórios</string>
+    <string name="texto_bem_inexistente">Bem inexistente</string>
 
 
 </resources>
