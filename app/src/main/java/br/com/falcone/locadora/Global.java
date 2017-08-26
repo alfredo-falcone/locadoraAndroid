@@ -66,7 +66,7 @@ class Global {
 
 
     public List<Bem> getBens() {
-        return bens;
+        return bens.sort();
     }
 
     public Bem getBemPorId(long id){

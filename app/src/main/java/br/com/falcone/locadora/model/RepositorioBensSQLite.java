@@ -25,12 +25,18 @@ public class RepositorioBensSQLite {
         final List<Bem> bens = new ArrayList<>();
 
         try {
-            final Cursor cursor = database.rawQuery(String.format("Select %s, %s, %s, %s From %s",
-                    MeuOpenHelper.Metadados.TabelaBens.COLUNA_ID,
+            String where = null;
+            String[] whereArgs = new String[]{};
+            String having = null;
+            String groupBy = null;
+            String orderBy = MeuOpenHelper.Metadados.TabelaBens.COLUNA_ID;
+
+            final Cursor cursor = database.query(MeuOpenHelper.Metadados.TabelaBens.NOME,
+                    new String[] {MeuOpenHelper.Metadados.TabelaBens.COLUNA_ID,
                     MeuOpenHelper.Metadados.TabelaBens.COLUNA_NOME,
                     MeuOpenHelper.Metadados.TabelaBens.COLUNA_GENERO,
-                    MeuOpenHelper.Metadados.TabelaBens.COLUNA_PRECO,
-                    MeuOpenHelper.Metadados.TabelaBens.NOME), new String[]{});
+                    MeuOpenHelper.Metadados.TabelaBens.COLUNA_PRECO},
+                    where, whereArgs, groupBy, having, orderBy );
 
             for (int i = 0, size = cursor.getCount(); i < size; i++) {
                 cursor.moveToPosition(i);
