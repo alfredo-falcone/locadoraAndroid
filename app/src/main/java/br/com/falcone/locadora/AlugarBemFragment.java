@@ -2,10 +2,12 @@ package br.com.falcone.locadora;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,14 +19,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import br.com.falcone.locadora.Util.OkHttpUtil;
+import br.com.falcone.locadora.model.Aluguel;
 import br.com.falcone.locadora.model.Bem;
 
 /**
@@ -102,7 +109,9 @@ public class AlugarBemFragment extends Fragment {
                             })
                             .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    alugar();
+                                    if(Global.getInstance(getContext()).IsConnected())
+                                        new AssyncLoad().execute(0);
+
                                 }
                             }).create();
 
@@ -116,7 +125,7 @@ public class AlugarBemFragment extends Fragment {
         return view;
     }
 
-    private void alugar() {
+    private void alugar(Double percentualAjustePreco) {
         EditText tbHoraDevolucao = AlugarBemFragment.this.getActivity().findViewById(R.id.tbHoraDevolucao);
         AppCompatSpinner spinBens = AlugarBemFragment.this.getActivity().findViewById(R.id.spinBens);
         int hourOfDay = Integer.parseInt(tbHoraDevolucao.getText().subSequence(0, 2).toString());
@@ -152,9 +161,22 @@ public class AlugarBemFragment extends Fragment {
                 pit);
 
 
-        Toast.makeText(getContext(), R.string.toast_alarme_agendado, Toast.LENGTH_SHORT).show();
 
-        Global.getInstance(getContext()).getAlugueis().put(idAlarme, bemSelecionado);
+        Calendar dataAluguel = Calendar.getInstance();
+        long miliSegundos = calendar.getTimeInMillis() - dataAluguel.getTimeInMillis();
+        long minutos = miliSegundos / (1000 * 60);
+        long horas  = minutos / 60;
+        minutos = minutos - (horas * 60);
+        if(minutos > 30)
+            horas++;
+
+        //double percentualAjustePreco = OkHttpUtil.CalcularPercentualAjustePreco(Global.getInstance(getContext()).getLocation());
+        double valorTotal = bemSelecionado.getPrecoHora() * percentualAjustePreco * horas;
+        Aluguel aluguel = new Aluguel(bemSelecionado, valorTotal);
+
+        Global.getInstance(getContext()).getAlugueis().put(idAlarme, aluguel);
+
+        Toast.makeText(getContext(), String.format(getString( R.string.toast_alarme_agendado), aluguel.getValorTotal()), Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(getActivity().getApplicationContext(), PrincipalActivity.class);
         if (i.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -178,6 +200,42 @@ public class AlugarBemFragment extends Fragment {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE), true);
         dialog.show();
+    }
+
+
+    public class AssyncLoad extends AsyncTask<Integer, Void, Double> {
+
+        @Override
+        protected Double doInBackground(Integer ... inteiros) {
+            /*switch(inteiros[0]) {
+                case TIPO_COMPONENTE_OKHTTP:
+                    return Util.CarregarArtigosOkHTTP();
+                case TIPO_COMPONENTE_RETROFIT:
+                    return Util.CarregarArtigosRetrofit();
+                default:
+                    return Util.CarregarArtigos();
+
+            }*/
+            return Global.getInstance(getContext()).CalcularPercentualAjustePreco();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ProgressBar barraProgresso = getActivity().findViewById(R.id.barraProgresso);
+
+            barraProgresso.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(Double percentual) {
+            super.onPostExecute(percentual);
+            ProgressBar barraProgresso = getActivity().findViewById(R.id.barraProgresso);
+            barraProgresso.setVisibility(View.GONE);
+
+            alugar(percentual);
+        }
     }
 
 }

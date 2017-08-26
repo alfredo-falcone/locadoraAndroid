@@ -1,5 +1,6 @@
 package br.com.falcone.locadora;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -17,8 +19,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
+    private static final int PERMISSAO_COARSE_LOCATION = 1234;
     private NotificationManager mNotificationManager;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -48,8 +53,8 @@ public class PrincipalActivity extends AppCompatActivity {
         });*/
 
         Button btBens = (Button) findViewById(R.id.btBens);
-        btBens.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        btBens.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 //AlertDialog pergunta = new AlertDialog.Builder()
                 ListarBens();
             }
@@ -57,8 +62,8 @@ public class PrincipalActivity extends AppCompatActivity {
         });
 
         Button btAlugar = (Button) findViewById(R.id.btAlugarBem);
-        btAlugar.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        btAlugar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 //createSimpleNotification();
                 //AlertDialog pergunta = new AlertDialog.Builder()
                 Alugar();
@@ -66,8 +71,12 @@ public class PrincipalActivity extends AppCompatActivity {
 
         });
 
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= 23
+                && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSAO_COARSE_LOCATION);
+        } else {
+
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
@@ -78,10 +87,11 @@ public class PrincipalActivity extends AppCompatActivity {
                             }
                         }
                     });
-
         }
 
+
     }
+
 
     private void ListarBens() {
         Intent i = new Intent(getApplicationContext(), ListarBensActivity.class);
@@ -100,6 +110,7 @@ public class PrincipalActivity extends AppCompatActivity {
     private void init(){
         mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
@@ -129,6 +140,37 @@ public class PrincipalActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSAO_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    mFusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        Global.getInstance(PrincipalActivity.this).setLocation(location);
+                                    }
+                                }
+                            });
+                } else {
+
+                    //Toast.makeText(this, String.format(context.getString(R.string.texto_notificacao_devolucao), nome), Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
     /*private void createSimpleNotification() {
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)

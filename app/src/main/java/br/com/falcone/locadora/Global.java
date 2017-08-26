@@ -8,6 +8,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import br.com.falcone.locadora.Util.OkHttpUtil;
+import br.com.falcone.locadora.model.Aluguel;
 import br.com.falcone.locadora.model.Bem;
 import br.com.falcone.locadora.model.MeuOpenHelper;
 import br.com.falcone.locadora.model.RepositorioBensSQLite;
@@ -29,7 +31,8 @@ class Global {
     private Location location;
     private int ultimaChave;
 
-    private Hashtable<Integer, Bem> alugueis;
+    private Context contexto;
+    private Hashtable<Integer, Aluguel> alugueis;
 
     public static synchronized Global getInstance(Context contexto) {
         if(ourInstance == null)
@@ -43,6 +46,7 @@ class Global {
         db = new MeuOpenHelper(contexto.getApplicationContext());
         repositorioBens = new RepositorioBensSQLite(db);
 
+        this.contexto = contexto.getApplicationContext();
         bens = repositorioBens.getBens();
         if(bens.size() == 0) {
             repositorioBens.inserir(new Bem(0, "Jet Ski Yamaha", "Navegação", 1.1));
@@ -83,23 +87,23 @@ class Global {
         this.bens = bens;
     }*/
 
-    public Hashtable<Integer, Bem> getAlugueis() {
+    public Hashtable<Integer, Aluguel> getAlugueis() {
         return alugueis;
     }
 
     public boolean IsBemAlugado(Bem bem)
     {
-        return getAlugueis().contains(bem);
+        return (GetIdAlarme(bem) != null);
     }
 
-    public void RemoverAluguel(Integer id){
+    /*public void RemoverAluguel(Integer id){
         this.getAlugueis().remove(id);
     }
 
     public void InserirAluguel(Bem bem){
         this.getAlugueis().put(getProximaChave(), bem);
     }
-
+*/
     public Location getLocation() {
         if(this.location == null){
              // Recife
@@ -121,7 +125,7 @@ class Global {
         Integer idAlarmeRetorno = null;
         while(chaves.hasNext()){
             Integer idAlarmeAtual = chaves.next();
-            if(getAlugueis().get(idAlarmeAtual).equals(bem))
+            if(getAlugueis().get(idAlarmeAtual).getBem().equals(bem))
                 idAlarmeRetorno = idAlarmeAtual;
         }
 
@@ -144,5 +148,13 @@ class Global {
 
     public void AtualizarBem(Bem bem){
         repositorioBens.atualizar(bem);
+    }
+
+    public boolean IsConnected(){
+        return OkHttpUtil.IsConnected(this.contexto);
+    }
+
+    public Double CalcularPercentualAjustePreco(){
+        return OkHttpUtil.CalcularPercentualAjustePreco(getLocation());
     }
 }

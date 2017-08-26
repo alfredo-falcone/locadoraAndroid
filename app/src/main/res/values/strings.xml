@@ -12,7 +12,7 @@
     <string name="texto_confirma_gravacao">Confirma gravação?</string>
     <string name="texto_preencher_hora_devolucao">"A hora de devolução deve ser preenchida"</string>
     <string name="ok">Ok</string>
-    <string name="toast_alarme_agendado">Alarme agendado!</string>
+    <string name="toast_alarme_agendado">Alarme agendado! Valor a cobrar: %f</string>
     <string name="texto_nome">Nome</string>
     <string name="texto_genero">Gênero</string>
     <string name="texto_titulo_notificacao_devolucao">Hora de recuperar bem</string>

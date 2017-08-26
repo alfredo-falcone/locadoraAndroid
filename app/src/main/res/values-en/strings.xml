@@ -12,7 +12,7 @@
     <string name="texto_confirma_gravacao">Confirm save?</string>
     <string name="texto_preencher_hora_devolucao">Devolution time is mandatory</string>
     <string name="ok">Ok</string>
-    <string name="toast_alarme_agendado">Item rented.</string>
+    <string name="toast_alarme_agendado">Item rented. Value: %f</string>
     <string name="texto_nome">Name</string>
     <string name="texto_genero">Gender</string>
     <string name="texto_titulo_notificacao_devolucao">Time to recover item</string>
